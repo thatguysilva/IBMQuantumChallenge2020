@@ -11,3 +11,32 @@ def mini_counter(qc, qr):
 def reverse_mini_counter(qc, qr):
     qc.cx(qr[0], qr[1])
     qc.ccx(qr[0], qr[1], qr[2])
+    
+    
+ main part:
+ 
+
+def permutation_matrix_oracle(qc, board, counter_reg, output, auxiliary):
+    # Check whether a board contains unsolvable assignments or not
+    for p in itertools.permutations([0, 1, 2, 3], 4):
+        control = []
+        for i in range(4):
+            control.append(board[4 * i + p[i]])     
+
+        qc.mcx(control, counter_reg[0], auxiliary, mode='basic')
+        mini_counter(qc, counter_reg)
+        qc.mcx(control, counter_reg[0], auxiliary, mode='basic')
+    # If the number of unsolvable assignments is 0, flip it phase
+    qc.x(counter_reg[1:3])
+    qc.mcx(counter_reg[1:3], output)
+    # Uncompute counter_reg
+    for p in itertools.permutations([0, 1, 2, 3], 4):
+        control = []
+        for i in range(4):
+            control.append(board[4 * i + p[i]])     
+
+        qc.mcx(control, counter_reg[0], auxiliary, mode='basic')
+        reverse_mini_counter(qc, counter_reg)
+        qc.mcx(control, counter_reg[0], auxiliary, mode='basic')
+
+

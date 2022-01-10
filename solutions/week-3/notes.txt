@@ -1,3 +1,13 @@
 Notes for week-3:
 
 I should compare the double-grover and permutation matrix methods. Still don't get the permutation matrix method though.
+
+lines 32-36:
+
+def mini_counter(qc, qr):
+    qc.ccx(qr[0], qr[1], qr[2])
+    qc.cx(qr[0], qr[1])
+
+def reverse_mini_counter(qc, qr):
+    qc.cx(qr[0], qr[1])
+    qc.ccx(qr[0], qr[1], qr[2])

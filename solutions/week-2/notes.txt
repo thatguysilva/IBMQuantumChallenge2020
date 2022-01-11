@@ -1,0 +1,71 @@
+hamming distance optimization:
+
+#U2A (base: 2a-another solution)
+def flip_1(qc,flip,tile):
+    # push 0
+    qc.cx(flip[0], tile[0])
+    qc.cx(flip[0], tile[1])
+    qc.cx(flip[0], tile[3])
+    # push 1
+    qc.cx(flip[1], tile[0])
+    qc.cx(flip[1], tile[1])
+    qc.cx(flip[1], tile[2])
+    qc.cx(flip[1], tile[4])
+    # push 2
+    qc.cx(flip[2], tile[1])
+    qc.cx(flip[2], tile[2])
+    qc.cx(flip[2], tile[5]) 
+    
+def inv_1(qc,flip,tile):
+    # copy 0,1,2
+    qc.cx(tile[0], flip[3])
+    qc.cx(tile[1], flip[4])
+    qc.cx(tile[2], flip[5])
+    
+def flip_2(qc,flip,tile):
+    # apply flip[3,4,5]
+    qc.cx(flip[3], tile[0])
+    qc.cx(flip[3], tile[3])
+    qc.cx(flip[3], tile[4])
+    qc.cx(flip[3], tile[6])
+    qc.cx(flip[4], tile[1])
+    qc.cx(flip[4], tile[3])
+    qc.cx(flip[4], tile[4])
+    qc.cx(flip[4], tile[5])
+    qc.cx(flip[4], tile[7])
+    qc.cx(flip[5], tile[2])
+    qc.cx(flip[5], tile[4])
+    qc.cx(flip[5], tile[5])
+    qc.cx(flip[5], tile[8])
+    
+def inv_2(qc,flip,tile1):
+    # copy 3,4,5
+    qc.cx(tile[3], flip[6])
+    qc.cx(tile[4], flip[7])
+    qc.cx(tile[5], flip[8])
+    
+def flip_3(qc,flip,tile):
+    qc.cx(flip[6], tile[3])
+    qc.cx(flip[6], tile[6])
+    qc.cx(flip[6], tile[7])
+    qc.cx(flip[7], tile[4])
+    qc.cx(flip[7], tile[6])
+    qc.cx(flip[7], tile[7])
+    qc.cx(flip[7], tile[8])
+    qc.cx(flip[8], tile[5])
+    qc.cx(flip[8], tile[7])
+    qc.cx(flip[8], tile[8])
+
+def lights_out_oracle(qc,tile,oracle,auxiliary):
+    qc.x(tile[6:9])
+    qc.mct(tile[6:9], oracle[0], auxiliary)
+    qc.x(tile[6:9])
+    
+def flipdiffusion(qc,flip):
+    qc.h(flip[:3])
+    qc.x(flip[:3])
+    qc.h(flip[2])
+    qc.ccx(flip[0],flip[1],flip[2])
+    qc.h(flip[2])
+    qc.x(flip[:3])
+    qc.h(flip[:3])
